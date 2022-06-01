@@ -2,15 +2,19 @@
 
 
 {% block body %}
-track name: {{t_name}}
-<div class="form-inline my-2 my-lg-0">
-    <a class="btn btn-outline-primary my-2 my-sm-0 mx-2" href="/addEntry">Add Laptime to {{t_name}}</a>
-</div>
+    <div id="banner" class="alert alert-danger" role="alert" hidden>Must be logged-in to add laptimes</div>
+    <br>
+    <h2>{{ t_name }}</h2>
+    <div class="d-flex flex-row justify-content-center">
+        <a id="add_button" class="btn btn-outline-primary my-2 my-sm-0 mx-2 align-center text-primary" href="/addEntry?track={{ t_name }}">Add Laptime
+            to {{ t_name }}</a>
+    </div>
 
-<form action="/tracks/{{t_name}}" method="POST">
-    <table class="table table-bordered table-striped table-sm">
-        <thead>
-        <!----
+    <br>
+    <form action="/tracks/{{ t_name }}" method="POST">
+        <table class="table table-bordered table-striped table-sm">
+            <thead>
+            <!----
         <tr>
             <th>
                 <a class="btn btn-outline-success my-2 my-sm-0 text-success mx-2" href="/tracks/{{t_name}}">Reset
@@ -97,20 +101,21 @@ track name: {{t_name}}
             </th>
         </tr>
         --->
-        <tr>
-            <th class="text-center col-1">Rank</th>
-            <th class="text-center col-2">User</th>
-            <th class="text-center col-2">Laptime</th>
-            <th class="text-center col-1">Delta</th>
-            <th class="text-center col-1">Traction<br>Control</th>
-            <th class="text-center col-1">Gearbox<br>Assist</th>
-            <th class="text-center col-1">Braking<br>Assist</th>
-            <th class="text-center col-3">Car</th>
-            <th class="text-center col-1">Date</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="table-success">
+            <tr>
+                <th class="text-center col-1">Rank</th>
+                <th class="text-center col-2">User</th>
+                <th class="text-center col-2">Laptime</th>
+                <th class="text-center col-1">Delta</th>
+                <th class="text-center col-1">Traction<br>Control</th>
+                <th class="text-center col-1">Gearbox<br>Assist</th>
+                <th class="text-center col-1">Braking<br>Assist</th>
+                <th class="text-center col-3">Car</th>
+                <th class="text-center col-1">Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--
+        <tr class="table-success" hidden>
             <td>a</td>
             <td>Just added</td>
             <td>c</td>
@@ -124,7 +129,7 @@ track name: {{t_name}}
         {% if 'username' in session %}
 
         {% endif %}
-        <tr class="table-primary">
+        <tr class="table-primary" hidden>
             <td>a</td>
             <td>Your Best</td>
             <td>c</td>
@@ -135,24 +140,60 @@ track name: {{t_name}}
             <td>h</td>
             <td>i</td>
         </tr>
+        -->
+            {% if arr|length > 0 %}
+                {% set best_sec = arr[0][3]  %}
+                {% set best_mili = arr[0][4] %}
+            {% endif %}
 
-        {% for i in range(arr|length) %}
-        <tr id="{{i + 1}}">
-            <td>{{i + 1}}</td>
-            <td>{{get_user_name(arr[i][2])}}</td>
-            <td>1:{{arr[i][3]}}.{{"%.3d"|format(arr[i][4])}}</td>
-            <td>+3.123</td>
-            <td>{{arr[i][5]}}</td>
-            <td>{{arr[i][6]}}</td>
-            <td>{{arr[i][7]}}</td>
-            <td>{{arr[i][8]}}</td>
-            <td>{{arr[i][9]}}</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            {% for i in range(arr|length) %}
+                {% set diff_mili = arr[i][4] - best_mili %}
+                {% set diff_sec = arr[i][3] - best_sec %}
+                {% if diff_mili < 0 %}
+                    {% set diff_mili = 1000 + diff_mili %}
+                    {% set diff_sec = diff_sec - 1 %}
+                {% endif %}
+                <tr id="{{ i + 1 }}">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ get_user_name(arr[i][2]) }}</td>
+                    <td>1:{{ arr[i][3] }}.{{ "%.3d"|format(arr[i][4]) }}</td>
+                    {% if i == 0 %}
+                    <td>---</td>
+                    {% else %}
+                    <td>+{{ diff_sec }}.{{ "%.3d"|format(diff_mili) }}</td>
+                    {% endif %}
+                    <td>{{ arr[i][5] }}</td>
+                    <td>{{ arr[i][6] }}</td>
+                    <td>{{ arr[i][7] }}</td>
+                    <td>{{ arr[i][8] }}</td>
+                    <td>{{ arr[i][9] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-</form>
+    </form>
 
+
+    {% if 'username' in session %}
+        <b id="logged_in" hidden="true">true</b>
+    {% else %}
+        <b id="logged_in" hidden="true">false</b>
+    {% endif %}
+
+    <script>
+        banner = document.getElementById('banner');
+        add_button = document.getElementById('add_button');
+        logged_in = document.getElementById('logged_in').innerText;
+        add_button.addEventListener('click',display_banner);
+
+        function display_banner(){
+            console.log('clicked')
+            if(logged_in == "false"){
+                add_button.removeAttribute('href')
+                banner.removeAttribute('hidden')
+            }
+        }
+    </script>
 
 {% endblock %}

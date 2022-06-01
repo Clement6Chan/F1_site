@@ -4,7 +4,7 @@ import json
 import random
 import string
 
-DB_FILE = "data/database.db"
+DB_FILE = "app/data/database.db"
 
 def getNextID(type):
     db = sqlite3.connect(DB_FILE)
@@ -16,6 +16,17 @@ def getNextID(type):
     return int(arr[0][0]) + 1
 
 #################LAPTIMES#####################
+def getBestTimes(track_arr):
+    best_times = []
+    for track_name in track_arr:
+        arr = getTrackLapTime(track_name)
+        if len(arr) == 0:
+            best_times.append([-1, track_name, -1, 0, 0, '---', '---', '---', '---', '---'])
+        else:
+            best_times.append(arr[0])
+    return best_times
+
+
 def getTrackLapTime(track_name):
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
@@ -36,9 +47,10 @@ def addLapTime(form, userID):
             return 1
         elif int(form['seconds']) == arr[0][3] and int(form['ms']) >= arr[0][4]:
             return 1
-        #c.execute('DELETE FROM laptimes WHERE user_id ={} AND traction=\"{}\" AND gearbox=\"{}\" '
-                  #'AND braking=\"{}\"'.format(userID, form['traction'], form['gearbox'], form['braking']))
+        c.execute('DELETE FROM laptimes WHERE user_id ={} AND traction=\"{}\" AND gearbox=\"{}\" '
+                  'AND braking=\"{}\"'.format(userID, form['traction'], form['gearbox'], form['braking']))
         entryID = arr[0][0]
+        #entryID = getNextID("laptimes")
     else:
         entryID = getNextID("laptimes")
     c.execute('INSERT INTO laptimes(id, track_name, user_id, sec, mili, traction, gearbox, braking, car, date_entered)'
@@ -75,6 +87,8 @@ def get_user_name(id):
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
     arr = c.execute('SELECT username FROM users WHERE id=\"{}\";'.format(id)).fetchall()
+    if len(arr) == 0:
+        return '---'
     return arr[0][0]
 
 

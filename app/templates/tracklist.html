@@ -3,5 +3,42 @@
 
 
 {% block body %}
-  tracklist
+    <table class="table table-sm">
+        <thead>
+        <tr>
+            <th class="text-center col-1">Track</th>
+            <th class="text-center col-1">Best</th>
+            <th class="text-center col-2">User</th>
+            <th class="text-center col-1">Traction<br>Control</th>
+            <th class="text-center col-1">Gearbox<br>Assist</th>
+            <th class="text-center col-1">Braking<br>Assist</th>
+            <th class="text-center col-1">Car</th>
+            <th class="text-center col-1">Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for line in best_times %}
+        <tr>
+            <th scope="row">
+                <a class="btn btn-outline-secondary" href="tracks/{{ line[1] }}">{{ line[1] }}</a>
+            </th>
+            {% if line[0] == -1 %}
+                <td>---</td>
+            {% else %}
+                <td>1:{{ line[3] }}.{{"%.3d"|format(line[4])}}</td>
+            {% endif %}
+            <td>{{ get_user_name(line[2]) }}</td>
+            <td>{{ line[5] }}</td>
+            <td>{{ line[6] }}</td>
+            <td>{{ line[7] }}</td>
+            <td>{{ line[8] }}</td>
+            <td>{{ line[9] }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+
+
 {% endblock %}

@@ -3,19 +3,30 @@ import os, platform, json
 from app.data.dbfunc import *
 
 key = ""
-UPLOAD_FOLDER = ""
-
-if (platform.system() == "Windows"):
-    UPLOAD_FOLDER = os.getcwd() + "\\app\\static\\images"
-elif (platform.system() == "Darwin" or platform.system() == "Linux"):
-        UPLOAD_FOLDER = 'static/images/'
-
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
-# UPLOAD_FOLDER = './static/images/'
-app.config['IMAGE_UPLOADS'] = UPLOAD_FOLDER
 mType = 0
 app.jinja_env.globals.update(get_user_name=get_user_name)
+path = "data/database.db"
+track_arr = ["Bahrain", "Imola", "Portugal", "Spain", "Monaco", "Azerbaijan", "Canada", "France", "Austria",
+                "Britain", "Hungary", "Belgium", "Netherlands", "Italy", "Russia", "Singapore", "Japan",
+                "USA", "Mexico", "Brazil", "Australia", "Saudi Arabia", "Abu Dhabi", "China"]
+
+car_arr = ["Mercedes", "Red Bull", "Ferrari", "McClaren", "Alpine", "Alpha Tauri", "Alfa Romeo",
+                "Aston Martin", "GUENTHER", "Williams", "Multiplayer Car"]
+
+traction_arr = ["High", "Med","Low","Off"]
+
+gearbox_arr = ["Auto","Manual"]
+
+braking_arr = ["High", "Med","Low","Off w/ ABS", "Off wo/ ABS"]
+
+big_data = {}
+big_data['track'] = track_arr
+big_data['traction'] = traction_arr
+big_data['gearbox'] = gearbox_arr
+big_data['braking'] = braking_arr
+big_data['car'] = car_arr
 
 @app.route('/')
 def hello_world():
@@ -45,7 +56,10 @@ def home():
 @app.route('/tracks')
 def tracks():
     print(session)
-    return render_template('tracklist.html')
+    best_times = getBestTimes(track_arr)
+    for b in best_times:
+        print(b)
+    return render_template('tracklist.html', big_data=big_data, best_times=best_times)
 
 @app.route('/tracks/<track_name>', methods=['GET', 'POST'])
 def track_view(track_name):
@@ -78,6 +92,8 @@ def users():
 
 @app.route('/profile')
 def profile():
+    if 'username' not in session:
+        return redirect('/')
     return render_template('profile.html')
 
 @app.route('/addEntry', methods=['GET', 'POST'])
@@ -87,7 +103,8 @@ def addEntry():
         return redirect('/')
         '''
     if request.method == 'GET':
-        return render_template('entry.html')
+        print(request.args)
+        return render_template('entry.html',  big_data=big_data, arr=request.args)
     else:
         global mType
         x = request.form
@@ -98,7 +115,7 @@ def addEntry():
         x = addLapTime(request.form, get_user_ID(session['username']))
         #print("add result: " + str(x))
         if(x == 1):
-            return render_template('entry.html', alert="Faster laptime in this configuration exists", arr=request.form)
+            return render_template('entry.html',  big_data=big_data, alert="Faster laptime in this configuration exists", arr=request.form)
         mType = 7
         session['entry'] = request.form
         return redirect('tracks/' + track_name)

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block body %}
+
 <br>
 <br>
 <form action="/addEntry" method="POST">
@@ -10,34 +11,13 @@
         <div class="form-group col-md-2">
             <label for="track">Track</label>
             <select name = "track" class="form-control" id = "track">
-                {% if 'track' in arr %}
-                <option SELECTED>{{arr['track']}}</option>
-                {% endif %}
-                <option>Bahrain</option>
-                <option >Bahrain</option>
-                <option>Imola</option>
-                <option>Portugal</option>
-                <option>Spain</option>
-                <option>Monaco</option>
-                <option>Azerbaijan</option>
-                <option>Canada</option>
-                <option>France</option>
-                <option>Austria</option>
-                <option>Britain</option>
-                <option>Hungary</option>
-                <option>Belgium</option>
-                <option>Netherlands</option>
-                <option>Italy</option>
-                <option>Russia</option>
-                <option>Singapore</option>
-                <option>Japan</option>
-                <option>USA</option>
-                <option>Mexico</option>
-                <option>Brazil</option>
-                <option>Australia</option>
-                <option>Saudi Arabia</option>
-                <option>Abu Dhabi</option>
-                <option>China</option>
+                {% for track_name in big_data['track'] %}
+                    {% if 'track' in arr and track_name == arr['track'] %}
+                        <option SELECTED>{{track_name}}</option>
+                    {% else %}
+                        <option>{{ track_name }}</option>
+                    {% endif %}
+                {% endfor %}
             </select>
         </div>
         <div class="form-group col-md-1">
@@ -63,55 +43,61 @@
         <div class="form-group col-md-1">
             <label for="traction">Traction</label>
             <select name="traction" id="traction" class="form-control">
-                {% if 'traction' in arr %}
-                <option SELECTED>{{arr['traction']}}</option>
-                {% endif %}
-                <option>High</option>
-                <option>Med</option>
-                <option>Low</option>
-                <option>Off</option>
+                {% for traction in big_data['traction'] %}
+                    {% if 'traction' in arr %}
+                        {% if arr['traction'] == traction %}
+                            <option SELECTED>{{traction}}</option>
+                        {% else %}
+                            <option>{{ traction }}</option>
+                        {% endif %}
+                    {% else %}
+                        <option>{{traction}}</option>
+                    {% endif %}
+                {% endfor %}
             </select>
         </div>
         <div class="form-group col-md-1">
             <label for="gearbox">Gearbox</label>
             <select name="gearbox" id="gearbox" class="form-control">
-                {% if 'gearbox' in arr %}
-                <option SELECTED>{{arr['gearbox']}}</option>
-                {% endif %}
-                <option>Auto</option>
-                <option>Manual</option>
+                {% for gearbox in big_data['gearbox'] %}
+                    {% if 'gearbox' in arr %}
+                        {% if arr['gearbox'] == gearbox %}
+                            <option SELECTED>{{gearbox}}</option>
+                        {% else %}
+                            <option>{{ gearbox }}</option>
+                        {% endif %}
+                    {% else %}
+                        <option>{{gearbox}}</option>
+                    {% endif %}
+                {% endfor %}
             </select>
         </div>
         <div class="form-group col-md-2">
             <label for="braking">Braking Assist</label>
             <select name="braking" id="braking" class="form-control">
-                {% if 'braking' in arr %}
-                <option SELECTED>{{arr['braking']}}</option>
-                {% endif %}
-                <option>High</option>
-                <option>Med</option>
-                <option>Low</option>
-                <option>Off w/ ABS</option>
-                <option>Off wo/ ABS</option>
+                {% for braking in big_data['braking'] %}
+                    {% if 'braking' in arr %}
+                        {% if arr['braking'] == braking %}
+                            <option SELECTED>{{braking}}</option>
+                        {% else %}
+                            <option>{{ braking }}</option>
+                        {% endif %}
+                    {% else %}
+                        <option>{{braking}}</option>
+                    {% endif %}
+                {% endfor %}
             </select>
         </div>
         <div class="form-group col-md-2">
             <label for="car">Car</label>
             <select name="car" id="car" class="form-control">
-                {% if 'car' in arr %}
-                <option SELECTED>{{arr['car']}}</option>
-                {% endif %}
-                <option>Mercedes</option>
-                <option>Red Bull</option>
-                <option>Ferrari</option>
-                <option>McClaren</option>
-                <option>Alpine</option>
-                <option>Alpha Tauri</option>
-                <option>Alfa Romeo</option>
-                <option>Aston Martin</option>
-                <option>GUENTHER</option>
-                <option>Williams</option>
-                <option>Multiplayer Car</option>
+                {% for car_name in big_data['car'] %}
+                    {% if 'car' in arr and arr['car'] == car_name %}
+                        <option SELECTED>{{ car_name }}</option>
+                    {% else %}
+                        <option>{{ car_name }}</option>
+                    {% endif %}
+                {% endfor %}
             </select>
         </div>
 

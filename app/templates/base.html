@@ -16,7 +16,6 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
       <a class="navbar-brand" href="/">F1 2021 Leaderboards</a>
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-        {% if 'username' in session %}
         <!---
         <li class="nav-item">
           <a class="nav-link" href="/home">Home</a>
@@ -28,7 +27,6 @@
         <li class="nav-item">
           <a class="nav-link" href="/users">Users</a>
         </li>
-        {% endif %}
       </ul>
       <form class="form-inline my-2 my-lg-0">
         {% if 'username' not in session %}
