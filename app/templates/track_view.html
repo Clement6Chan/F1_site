@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+
+{% block body %}
+track name: {{t_name}}
+<div class="form-inline my-2 my-lg-0">
+    <a class="btn btn-outline-primary my-2 my-sm-0 mx-2" href="/addEntry">Add Laptime to {{t_name}}</a>
+</div>
+
+<form action="/tracks/{{t_name}}" method="POST">
+    <table class="table table-bordered table-striped table-sm">
+        <thead>
+        <!----
+        <tr>
+            <th>
+                <a class="btn btn-outline-success my-2 my-sm-0 text-success mx-2" href="/tracks/{{t_name}}">Reset
+                    Filters</a>
+            </th>
+            <th>
+                <select name="user" class="form-control" id="user">
+                    <option>All</option>
+                    {% if 'username' in session %}
+                    {% if 'user' in selections %}
+                    {% if selections['user'] != "All" %}
+                    <option selected>{{session['username']}}</option>
+                    {% endif %}
+                    {% else %}
+                    <option>{{session['username']}}</option>
+                    {% endif %}
+                    {% endif %}
+                </select>
+            </th>
+            <th></th>
+            <th></th>
+            <th>
+                <select name="traction" class="form-control" id="traction">
+                    {% if 'traction' in selections %}
+                        {% if selections['traction'] == "All" %}
+                            <option selected>All</option>
+                        {% else %}
+                            <option>All</option>
+                        {% endif %}
+                    {% else %}
+                        <option>All</option>
+                    {% endif %}
+
+                    {% if 'traction' in selections %}
+                        {% if selections['traction'] == "Off" %}
+                            <option selected>Off</option>
+                        {% else %}
+                            <option>Off</option>
+                        {% endif %}
+                    {% else %}
+                        <option>Off</option>
+                    {% endif %}
+
+                    {% if 'traction' in selections %}
+                        {% if selections['traction'] == "Half" %}
+                            <option selected>Half</option>
+                        {% else %}
+                            <option>Half</option>
+                        {% endif %}
+                    {% else %}
+                        <option>Half</option>
+                    {% endif %}
+
+                    {% if 'traction' in selections %}
+                        {% if selections['traction'] == "Full" %}
+                            <option selected>Full</option>
+                        {% else %}
+                            <option>Full</option>
+                        {% endif %}
+                    {% else %}
+                        <option>Full</option>
+                    {% endif %}
+                </select>
+            </th>
+            <th>
+                <select name="gearbox" class="form-control" id="gearbox">
+                    <option>All</option>
+                    <option>Manual</option>
+                    <option>Auto</option>
+                </select>
+            </th>
+            <th>
+                <select name="braking" class="form-control" id="braking">
+                    <option>All</option>
+                    <option>Off</option>
+                    <option>Low</option>
+                    <option>Med</option>
+                    <option>High</option>
+                </select>
+            </th>
+            <th></th>
+            <th>
+                <button class="btn btn-outline-success my-2 my-sm-0 text-success mx-2">Apply Filters</button>
+            </th>
+        </tr>
+        --->
+        <tr>
+            <th class="text-center col-1">Rank</th>
+            <th class="text-center col-2">User</th>
+            <th class="text-center col-2">Laptime</th>
+            <th class="text-center col-1">Delta</th>
+            <th class="text-center col-1">Traction<br>Control</th>
+            <th class="text-center col-1">Gearbox<br>Assist</th>
+            <th class="text-center col-1">Braking<br>Assist</th>
+            <th class="text-center col-3">Car</th>
+            <th class="text-center col-1">Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="table-success">
+            <td>a</td>
+            <td>Just added</td>
+            <td>c</td>
+            <td>d</td>
+            <td>e</td>
+            <td>f</td>
+            <td>g</td>
+            <td>h</td>
+            <td>i</td>
+        </tr>
+        {% if 'username' in session %}
+
+        {% endif %}
+        <tr class="table-primary">
+            <td>a</td>
+            <td>Your Best</td>
+            <td>c</td>
+            <td>d</td>
+            <td>e</td>
+            <td>f</td>
+            <td>g</td>
+            <td>h</td>
+            <td>i</td>
+        </tr>
+
+        {% for i in range(arr|length) %}
+        <tr id="{{i + 1}}">
+            <td>{{i + 1}}</td>
+            <td>{{get_user_name(arr[i][2])}}</td>
+            <td>1:{{arr[i][3]}}.{{"%.3d"|format(arr[i][4])}}</td>
+            <td>+3.123</td>
+            <td>{{arr[i][5]}}</td>
+            <td>{{arr[i][6]}}</td>
+            <td>{{arr[i][7]}}</td>
+            <td>{{arr[i][8]}}</td>
+            <td>{{arr[i][9]}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</form>
+
+
+{% endblock %}
