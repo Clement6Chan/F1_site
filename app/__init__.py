@@ -15,7 +15,7 @@ track_arr = ["Bahrain", "Imola", "Portugal", "Spain", "Monaco", "Azerbaijan", "C
 car_arr = ["Mercedes", "Red Bull", "Ferrari", "McClaren", "Alpine", "Alpha Tauri", "Alfa Romeo",
                 "Aston Martin", "GUENTHER", "Williams", "Multiplayer Car"]
 
-traction_arr = ["High", "Med","Low","Off"]
+traction_arr = ["Full", "Med","Off"]
 
 gearbox_arr = ["Auto","Manual"]
 
@@ -42,15 +42,15 @@ def home():
         return redirect('/')
     global mType
     if mType == 0:
-        return render_template('home.html')
+        return render_template('landing.html')
     elif mType == 1:
         mType = 0
-        return render_template('home.html', success="Logged In")
+        return render_template('landing.html', success="Logged In")
     elif mType == 2:
         mType = 0
         return render_template('landing.html', success="Logged Out")
 
-    return render_template('home.html')
+    return render_template('landing.html')
 
 #################CORE####################
 @app.route('/tracks')

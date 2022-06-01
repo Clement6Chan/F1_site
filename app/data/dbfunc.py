@@ -36,9 +36,9 @@ def getTrackLapTime(track_name):
 def addLapTime(form, userID):
     db = sqlite3.connect(DB_FILE)
     c = db.cursor()
-    arr = c.execute('SELECT * FROM laptimes WHERE user_id ={} AND traction=\"{}\" AND gearbox=\"{}\" AND braking=\"{}\"'
-                    ' and car = \"{}\"'.format(userID, form['traction'], form['gearbox'],
-                                               form['braking'], form['car'])).fetchall()
+    arr = c.execute('SELECT * FROM laptimes WHERE track_name = \"{}\" AND user_id ={} AND traction=\"{}\" '
+                    'AND gearbox=\"{}\" AND braking=\"{}\" AND car = \"{}\"'
+                    .format(form['track'], userID, form['traction'], form['gearbox'], form['braking'], form['car'])).fetchall()
     print(arr)
     entryID = 0
     if(len(arr) != 0):
